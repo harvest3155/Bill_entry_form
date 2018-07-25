@@ -1,5 +1,7 @@
 import tkinter
 from tkinter import *
+import psycopg2
+
 
 window= Tk()
 
@@ -23,15 +25,31 @@ def enter_all():
     auto_chk= Auto_Pay.get()
     ongoing_chk =Ongoing_pay.get()
     name_sel=Name_text.get()
-    
-    print(bills_ent)
-    print(comp_ent)
-    print(amount_ent)
-    print(due_ent)
-    print(auto_chk)
-    print(end_ent)
-    print(ongoing_chk)
-    print(name_sel)
+##    
+##    print(bills_ent)
+##    print(comp_ent)
+##    print(amount_ent)
+##    print(due_ent)
+##    print(auto_chk)
+##    print(end_ent)
+##    print(ongoing_chk)
+##    print(name_sel)
+    conn = psycopg2.connect("dbname='Andy' user='postgres' host='localhost'\
+    password='S3155'")
+    cur = conn.cursor()
+
+    cur.execute('INSERT INTO bill.monthly_bills(company_name,bill_name,\
+    amount_due_monthly,account, user_name,due_date,end_date,reocurring,autopay) VALUES (%s, %s, %s, %s, %s, %s,\
+    %s, %s, %s)', (comp_ent, bills_ent, amount_ent ,'c',name_sel,due_ent,end_ent,  ongoing_chk, auto_chk))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+    print("Data submitted")
+
+
+
+
 
 def close_window():
     window.destroy()
@@ -111,3 +129,4 @@ b3.grid(row=6,column=5)
 
 
 window.mainloop()
+
